@@ -18,7 +18,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        setContentView(R.layout.activity_main)  // 注意必须先设置视图！
+
+        // 获取控件
+        phoneInput = findViewById(R.id.editPhone)
+        saveButton = findViewById(R.id.btnSave)
 
         // 申请权限
         ActivityCompat.requestPermissions(this, arrayOf(
@@ -27,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.READ_SMS
         ), 1)
 
-        // 设置默认短信应用
+        // 提示设置为默认短信应用
         val myPackageName = packageName
         if (Telephony.Sms.getDefaultSmsPackage(this) != myPackageName) {
             val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
@@ -35,15 +40,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // 初始化界面
-        phoneInput = findViewById(R.id.editPhone)
-        saveButton = findViewById(R.id.btnSave)
-
-        // 加载保存的手机号
+        // 加载并显示保存的号码
         val prefs = getSharedPreferences("sms_config", Context.MODE_PRIVATE)
         phoneInput.setText(prefs.getString("forward_number", ""))
 
-        // 保存手机号
+        // 保存逻辑
         saveButton.setOnClickListener {
             val phone = phoneInput.text.toString().trim()
             if (phone.isNotEmpty()) {
