@@ -1,1 +1,1 @@
-# SMS_forwarder
+# sms-forwarder-template
